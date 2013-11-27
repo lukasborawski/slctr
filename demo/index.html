@@ -32,7 +32,11 @@
         </div>
     </div>
     <script type="text/javascript">
-        $('body').slctr();
+        $('body').slctr({
+            callback : function(e){
+                console.log(e);
+            }
+        });
     </script>
 </body>
 </html>

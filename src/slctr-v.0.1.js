@@ -8,7 +8,7 @@
  MIT License: www.opensource.org/licenses/MIT
  */
 
-var $selectCordsDt;
+var $selectCoordsDt;
 
 ;(function ($, window, document) {
 
@@ -135,7 +135,11 @@ var $selectCordsDt;
                         // data coords displaying
                         $selectCoords = $('#selectCoords');
                         $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
-                        $selectCordsDt = $selectCoords.data();
+                        $selectCoordsDt = $selectCoords.data();
+                        // callback data
+                        if (typeof t.settings.callback === "function"){
+                            t.settings.callback($selectCoordsDt);
+                        }
                     });
                     setTimeout(function (){
                         _selectMark.on('mouseenter', function(){
