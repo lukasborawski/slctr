@@ -1,0 +1,11 @@
+/*
+ Slctr v.0.1
+ ------------------------------------------------------------------
+ Info: Slctr is a simple jQuery plugin created for selecting
+ an area of graphic document and get coordinates of this selection.
+ (c) Lukas Borawski - lukas.borawski@gmail.com | 2013
+ ------------------------------------------------------------------
+ MIT License: www.opensource.org/licenses/MIT
+ */
+
+var $selectCordsDt;(function(e,t,n){function o(t){this.settings=e.extend({},s,t);this.init()}var r,i="slctr",s={slctrBox:"#slctrBox",insdElmnts:"img",globalWidth:"undefined",cursorDistance:10};e.fn.doesExist=function(){return this.length>0};var u=function(e,t){var r=n.createElement(e);for(var i in t){r[i]=t[i]}return r};o.prototype={init:function(){var t=e(this.settings.slctrBox);t.doesExist()?r=true:r=console.log("App failed");if(r){var i=t.find(">"+this.settings.insdElmnts),s=u("div",{className:"selectArea"}),o,a,f=400,l=this;i.data("data","insideObject");var c=t.find(">"+this.settings.insdElmnts).length,h=0;i.data("insideObject",i.data("insideObject")).load(function(){function e(){t.width(n).css("visibility","visible");i.wrapAll(s)}h++;if(h>=c){if(l.settings.globalWidth==="undefined"){var n=i.first().width();e()}else{t.width(l.settings.globalWidth);e()}}});function p(e,t){d=false;v=0;m=0;o.remove();if(e){t.off("mousemove");t.off("mousedown")}}var d,v,m=false;e(n.body).on("mousedown",".selectArea",function(r){r.preventDefault();d=true;a=e("#selectCoords");if(a.doesExist()){a.remove()}var i=u("input",{type:"hidden",id:"selectCoords"});e(n.body).append(i).one();var s=e(this).offset(),c=r.pageX-s.left,h=r.pageY-s.top;var g=u("div",{className:"selectMark"});t.append(g);o=e(".selectMark");o.css({left:c-l.settings.cursorDistance,top:h-l.settings.cursorDistance});var y=0,b=0;e(this).unbind("mousemove").on("mousemove",function(e){if(d){m&&(b+=e.pageY-m);v&&(y+=e.pageX-v);v=e.pageX;m=e.pageY;o.css({width:y,height:b});y>0?o.addClass("correct"):o.removeClass("correct")}});e(n).unbind("mouseup").on("mouseup",function(){p(true,e(".selectArea"));a=e("#selectCoords");a.data({x:c,y:h,w:y,h:b});$selectCordsDt=a.data()});setTimeout(function(){o.on("mouseenter",function(){p()})},f)})}}};e.fn[i]=function(t){return this.each(function(){if(!e.data(this,"plugin_"+i)){e.data(this,"plugin_"+i,new o(t))}})}})(jQuery,window,document)

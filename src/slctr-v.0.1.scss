@@ -1,0 +1,51 @@
+$fullSize: 100%;
+$valueNull: 0;
+
+$defBorderColor: #ccc;
+$incrtBorderColor: #ffd4c7;
+$crctBorderColor: #b5d7bc;
+$defBackgroundColor: rgba(204, 204, 204, 0.2);
+
+@mixin pos_abs-t {
+  top: 0; left: 0;
+  position: absolute;
+}
+
+#slctrBox {
+  @extend %slctrBox;
+}
+%slctrBox {
+  overflow: scroll;
+  visibility: hidden;
+  position: relative;
+  margin: $valueNull auto;
+  border: 1px solid $defBorderColor;
+  .selectFace {
+    z-index: 3;
+    @include pos_abs-t;
+    vertical-align: top;
+    width: $fullSize; height: $fullSize;
+  }
+  .selectArea {
+    z-index: 1;
+    width: $fullSize;
+    position: relative;
+    font-size: $valueNull;
+    img {
+      height: auto;
+      display: block;
+      margin: $valueNull;
+      border: $valueNull;
+      top: $valueNull; left: $valueNull;
+    }
+  }
+  .selectMark {
+    z-index: 2;
+    position: absolute;
+    border: 1px solid $incrtBorderColor;
+    background-color: $defBackgroundColor;
+    &.correct {
+      border-color: $crctBorderColor;
+    }
+  }
+}

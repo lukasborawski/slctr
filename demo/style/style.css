@@ -1,0 +1,33 @@
+#slctrBox {
+  overflow: scroll;
+  visibility: hidden;
+  position: relative;
+  margin: 0 auto;
+  border: 1px solid #cccccc; }
+  #slctrBox .selectFace {
+    z-index: 3;
+    top: 0;
+    left: 0;
+    position: absolute;
+    vertical-align: top;
+    width: 100%;
+    height: 100%; }
+  #slctrBox .selectArea {
+    z-index: 1;
+    width: 100%;
+    position: relative;
+    font-size: 0; }
+    #slctrBox .selectArea img {
+      height: auto;
+      display: block;
+      margin: 0;
+      border: 0;
+      top: 0;
+      left: 0; }
+  #slctrBox .selectMark {
+    z-index: 2;
+    position: absolute;
+    border: 1px solid #ffd4c7;
+    background-color: rgba(204, 204, 204, 0.2); }
+    #slctrBox .selectMark.correct {
+      border-color: #b5d7bc; }
