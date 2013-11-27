@@ -58,12 +58,12 @@ var $selectCoordsDt;
                 insideElmnt.data('insideObject', insideElmnt.data('insideObject')).load(function(){
                     counter ++;
                     function slctrBox_display(){
+                        var defaultWidth = insideElmnt.first().width();
                         mainBox.width(defaultWidth).css('visibility', 'visible');
                         insideElmnt.wrapAll(selectAreaNode);
                     }
                     if (counter >= insideElmntsLength){
                         if (t.settings.globalWidth === "undefined"){
-                            var defaultWidth = insideElmnt.first().width();
                             slctrBox_display();
                         }
                         else {
