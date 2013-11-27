@@ -1,7 +1,7 @@
 Slctr
 ---
 
-Slctr is a simple jQuery plugin created for selecting an area of graphic document and get coordinates of this selection. The view of selection is displaying as a simple transparent rectangle. Simple style is build on SASS.
+Slctr is a simple jQuery plugin created for selecting an area of graphic document and get coordinates of this selection. The view of selection is displayed as a simple transparent rectangle. Simple style is built on SASS.
 
 ###Markup 
 
