@@ -132,7 +132,7 @@ var $selectCoordsDt;
                     $(document).unbind('mouseup').on('mouseup', function() {
                         selectMark_reset(true, $('.selectArea'));
 
-                        // data coords displaying
+                        // coords data displaying
                         $selectCoords = $('#selectCoords');
                         $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
                         $selectCoordsDt = $selectCoords.data();
