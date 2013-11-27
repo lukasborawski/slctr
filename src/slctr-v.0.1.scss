@@ -2,7 +2,7 @@ $fullSize: 100%;
 $valueNull: 0;
 
 $defBorderColor: #ccc;
-$incrtBorderColor: #ffd4c7;
+$incrctBorderColor: #ffd4c7;
 $crctBorderColor: #b5d7bc;
 $defBackgroundColor: rgba(204, 204, 204, 0.2);
 
@@ -42,7 +42,7 @@ $defBackgroundColor: rgba(204, 204, 204, 0.2);
   .selectMark {
     z-index: 2;
     position: absolute;
-    border: 1px solid $incrtBorderColor;
+    border: 1px solid $incrctBorderColor;
     background-color: $defBackgroundColor;
     &.correct {
       border-color: $crctBorderColor;
