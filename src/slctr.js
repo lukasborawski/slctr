@@ -1,5 +1,5 @@
 /*
- Slctr v.0.1
+ Slctr v.0.2
  ------------------------------------------------------------------
  Info: Slctr is a simple jQuery plugin created for selecting
  an area of graphic document and get coordinates of this selection.
