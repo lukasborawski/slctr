@@ -54,4 +54,4 @@ Please note that is 0.1 version. Feel free to use the plugin anywhere and any wa
 
 **MIT License: [www.opensource.org/licenses/MIT](http://opensource.org/licenses/MIT "License").**
 
-**Credits**: Wojtek Górecki.
+**Credits: [Wojciech Górecki](http://stackoverflow.com/users/823235/avall "Wojciech Górecki").**
