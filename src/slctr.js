@@ -88,7 +88,7 @@ var $selectCoordsDt;
                 // mouse events
                 var select, prevX, prevY = false;
                 $(document.body).on('mousedown', '.selectArea', function(e) {
-                    if ((!$.browser.msie && e.button == 0) || ($.browser.msie && e.button == 1) ) {
+                    if ((!$.browser.msie && e.button == 0) || ($.browser.msie && e.button == 1)) {
                         e.preventDefault();
                         select = true;
 
@@ -148,7 +148,7 @@ var $selectCoordsDt;
                             });
                         }, int);
                     }
-                    else if(e.button == 2){
+                    else if (e.button == 2){
                         /* console.log('Plugin is disable for right click'); */
                     }
                 });
