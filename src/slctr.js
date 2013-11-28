@@ -88,64 +88,69 @@ var $selectCoordsDt;
                 // mouse events
                 var select, prevX, prevY = false;
                 $(document.body).on('mousedown', '.selectArea', function(e) {
-                    e.preventDefault();
-                    select = true;
+                    if ((!$.browser.msie && e.button == 0) || ($.browser.msie && e.button == 1) ) {
+                        e.preventDefault();
+                        select = true;
 
-                    // selectCoords
-                    // build and destroy select coords input
-                    $selectCoords = $('#selectCoords');
-                    if ($selectCoords.doesExist()){
-                        $selectCoords.remove();
-                    }
-                    var selectCoordsNode = createEl('input', {type: "hidden", id: "selectCoords"});
-                    $(document.body).append(selectCoordsNode).one();
-
-                    // selectMark
-                    // position calculate
-                    var offset = $(this).offset(),
-                        x2 = (e.pageX - offset.left),
-                        y2 = (e.pageY - offset.top);
-                    var selectMarkNode = createEl("div", {className: 'selectMark'});
-                    mainBox.append(selectMarkNode);
-                    _selectMark = $('.selectMark');
-                    _selectMark.css({
-                        left: x2 - t.settings.cursorDistance,
-                        top: y2 - t.settings.cursorDistance
-                    });
-
-                    // selectMark
-                    // size calculate
-                    var xShifted = 0, yShifted = 0;
-                    $(this).unbind('mousemove').on('mousemove', function(e) {
-                        if (select) {
-                            prevY && (yShifted += e.pageY - prevY);
-                            prevX && (xShifted += e.pageX - prevX);
-                            prevX = e.pageX;
-                            prevY = e.pageY;
-                            _selectMark.css({
-                                width: xShifted,
-                                height: yShifted
-                            });
-                            xShifted > 0 ? _selectMark.addClass('correct') : _selectMark.removeClass('correct');
-                        }
-                    });
-                    $(document).unbind('mouseup').on('mouseup', function() {
-                        selectMark_reset(true, $('.selectArea'));
-
-                        // coords data displaying
+                        // selectCoords
+                        // build and destroy select coords input
                         $selectCoords = $('#selectCoords');
-                        $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
-                        $selectCoordsDt = $selectCoords.data();
-                        // callback data
-                        if (typeof t.settings.callback === "function"){
-                            t.settings.callback($selectCoordsDt);
+                        if ($selectCoords.doesExist()){
+                            $selectCoords.remove();
                         }
-                    });
-                    setTimeout(function (){
-                        _selectMark.on('mouseenter', function(){
-                            selectMark_reset();
+                        var selectCoordsNode = createEl('input', {type: "hidden", id: "selectCoords"});
+                        $(document.body).append(selectCoordsNode).one();
+
+                        // selectMark
+                        // position calculate
+                        var offset = $(this).offset(),
+                            x2 = (e.pageX - offset.left),
+                            y2 = (e.pageY - offset.top);
+                        var selectMarkNode = createEl("div", {className: 'selectMark'});
+                        mainBox.append(selectMarkNode);
+                        _selectMark = $('.selectMark');
+                        _selectMark.css({
+                            left: x2 - t.settings.cursorDistance,
+                            top: y2 - t.settings.cursorDistance
                         });
-                    }, int);
+
+                        // selectMark
+                        // size calculate
+                        var xShifted = 0, yShifted = 0;
+                        $(this).unbind('mousemove').on('mousemove', function(e) {
+                            if (select) {
+                                prevY && (yShifted += e.pageY - prevY);
+                                prevX && (xShifted += e.pageX - prevX);
+                                prevX = e.pageX;
+                                prevY = e.pageY;
+                                _selectMark.css({
+                                    width: xShifted,
+                                    height: yShifted
+                                });
+                                xShifted > 0 ? _selectMark.addClass('correct') : _selectMark.removeClass('correct');
+                            }
+                        });
+                        $(document).unbind('mouseup').on('mouseup', function() {
+                            selectMark_reset(true, $('.selectArea'));
+
+                            // data coords displaying
+                            $selectCoords = $('#selectCoords');
+                            $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
+                            $selectCoordsDt = $selectCoords.data();
+                            // callback data
+                            if (typeof t.settings.callback === "function"){
+                                t.settings.callback($selectCoordsDt);
+                            }
+                        });
+                        setTimeout(function (){
+                            _selectMark.on('mouseenter', function(){
+                                selectMark_reset();
+                            });
+                        }, int);
+                    }
+                    else if(e.button == 2){
+                        /* console.log('Plugin is disable for right click'); */
+                    }
                 });
             }
         }
