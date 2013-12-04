@@ -53,8 +53,9 @@ var $selectCoordsDt;
 
                 // selectArea
                 // global width calculate
+                var counter = 0,
+                    insideElmntsLength = mainBox.find('>' + this.settings.insdElmnts).length;
                 insideElmnt.data('data', 'insideObject');
-                var insideElmntsLength = mainBox.find('>' + this.settings.insdElmnts).length, counter = 0;
                 insideElmnt.data('insideObject', insideElmnt.data('insideObject')).load(function(){
                     counter ++;
                     function slctrBox_display(){
@@ -88,7 +89,7 @@ var $selectCoordsDt;
                 // mouse events
                 var select, prevX, prevY = false;
                 $(document.body).on('mousedown', '.selectArea', function(e) {
-                    if ((!$.browser.msie && e.button == 0) || ($.browser.msie && e.button == 1)) {
+                    if ((!$.browser.msie && e.button == 0) || ($.browser.msie && e.button == 1) ) {
                         e.preventDefault();
                         select = true;
 
@@ -130,7 +131,7 @@ var $selectCoordsDt;
                                 xShifted > 0 ? _selectMark.addClass('correct') : _selectMark.removeClass('correct');
                             }
                         });
-                        $(document).unbind('mouseup').on('mouseup', function() {
+                        $(document).unbind('mouseup').on('mouseup', '.selectArea', function() {
                             selectMark_reset(true, $('.selectArea'));
 
                             // data coords displaying
@@ -148,7 +149,7 @@ var $selectCoordsDt;
                             });
                         }, int);
                     }
-                    else if (e.button == 2){
+                    else if(e.button == 2){
                         /* console.log('Plugin is disable for right click'); */
                     }
                 });
