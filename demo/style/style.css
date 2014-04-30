@@ -27,7 +27,5 @@
   #slctrBox .selectMark {
     z-index: 2;
     position: absolute;
-    border: 1px solid #ffd4c7;
+    border: 1px solid #b5d7bc;
     background-color: rgba(204, 204, 204, 0.2); }
-    #slctrBox .selectMark.correct {
-      border-color: #b5d7bc; }

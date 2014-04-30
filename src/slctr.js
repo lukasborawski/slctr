@@ -1,14 +1,14 @@
 /*
- Slctr v.0.2
+ Slctr v.0.3
  ------------------------------------------------------------------
  Info: Slctr is a simple jQuery plugin created for selecting
  an area of graphic document and get coordinates of this selection.
- (c) Lukas Borawski - lukas.borawski@gmail.com | 2013
+ (c) Lukas Borawski - lukas.borawski@gmail.com | 2013/2014
  ------------------------------------------------------------------
  MIT License: www.opensource.org/licenses/MIT
  */
 
-var $selectCoordsDt;
+var $selectCoordsDtm;
 
 ;(function ($, window, document) {
 
@@ -18,7 +18,7 @@ var $selectCoordsDt;
             slctrBox: '#slctrBox',
             insdElmnts: 'img',
             globalWidth: 'undefined',
-            cursorDistance: 10
+            cursorDistance: 2
         };
 
     // constructor
@@ -88,70 +88,130 @@ var $selectCoordsDt;
 
                 // mouse events
                 var select, prevX, prevY = false;
+
                 $(document.body).on('mousedown', '.selectArea', function(e) {
-                    if ((!$.browser.msie && e.button == 0) || ($.browser.msie && e.button == 1) ) {
-                        e.preventDefault();
-                        select = true;
+                    e.preventDefault();
+                    select = true;
 
-                        // selectCoords
-                        // build and destroy select coords input
-                        $selectCoords = $('#selectCoords');
-                        if ($selectCoords.doesExist()){
-                            $selectCoords.remove();
+                    // selectCoords
+                    // build and destroy select coords input
+                    $selectCoords = $('#selectCoords');
+                    if ($selectCoords.doesExist()){
+                        $selectCoords.remove();
+                    }
+                    var selectCoordsNode = createEl('input', {type: "hidden", id: "selectCoords"});
+                    $(document.body).append(selectCoordsNode).one();
+
+                    // selectMark
+                    // position calculate
+                    var selectMarkNode = createEl("div", {className: 'selectMark'});
+                    mainBox.append(selectMarkNode);
+                    _selectMark = $('.selectMark');
+
+                    // selectMark
+                    // direction logic
+                    function closestDirection(x,y,w,h) {
+                        var topEdgeDist = distMetric(x,y,w/2,0);
+                        var bottomEdgeDist = distMetric(x,y,w/2,h);
+                        var leftEdgeDist = distMetric(x,y,0,h/2);
+                        var rightEdgeDist = distMetric(x,y,w,h/2);
+                        var min = Math.min(topEdgeDist,bottomEdgeDist,leftEdgeDist,rightEdgeDist);
+
+                        switch (min) {
+                            case leftEdgeDist:
+                                return "left";
+                            case rightEdgeDist:
+                                return "right";
+                            case topEdgeDist:
+                                return "top";
+                            case bottomEdgeDist:
+                                return "bottom";
                         }
-                        var selectCoordsNode = createEl('input', {type: "hidden", id: "selectCoords"});
-                        $(document.body).append(selectCoordsNode).one();
+                    }
+                    function distMetric(x,y,x2,y2) {
+                        var xDiff = x - x2;
+                        var yDiff = y - y2;
 
-                        // selectMark
-                        // position calculate
-                        var offset = $(this).offset(),
-                            x2 = (e.pageX - offset.left),
-                            y2 = (e.pageY - offset.top);
-                        var selectMarkNode = createEl("div", {className: 'selectMark'});
-                        mainBox.append(selectMarkNode);
-                        _selectMark = $('.selectMark');
-                        _selectMark.css({
-                            left: x2 - t.settings.cursorDistance,
-                            top: y2 - t.settings.cursorDistance
-                        });
+                        return (xDiff * xDiff) + (yDiff * yDiff);
+                    }
 
-                        // selectMark
-                        // size calculate
-                        var xShifted = 0, yShifted = 0;
-                        $(this).unbind('mousemove').on('mousemove', function(e) {
-                            if (select) {
-                                prevY && (yShifted += e.pageY - prevY);
-                                prevX && (xShifted += e.pageX - prevX);
-                                prevX = e.pageX;
-                                prevY = e.pageY;
+                    // selectMark
+                    // default values
+                    var xShifted = 0, yShifted = 0;
+                    var offset = $(this).offset();
+
+                    // selectMark
+                    // size calculate
+                    $(this).unbind('mousemove').on('mousemove', function(e) {
+                        if (select){
+                            var edge = closestDirection(e.pageX, e.pageY, $(this).width(), $(this).height());
+
+                            if (edge == "left" || edge == "top"){
+                                // selectMark
+                                // behavior dependent of left move
+                                var x2 = (e.pageX - offset.left),
+                                    y2 = (e.pageY - offset.top);
+
                                 _selectMark.css({
-                                    width: xShifted,
-                                    height: yShifted
+                                    left: x2 - t.settings.cursorDistance,
+                                    top: y2 - t.settings.cursorDistance
                                 });
-                                xShifted > 0 ? _selectMark.addClass('correct') : _selectMark.removeClass('correct');
+                                $(this).unbind('mousemove').on('mousemove', function(e) {
+                                    if (select) {
+                                        prevY && (yShifted += e.pageY - prevY);
+                                        prevX && (xShifted += e.pageX - prevX);
+                                        prevX = e.pageX;
+                                        prevY = e.pageY;
+                                        _selectMark.css({
+                                            width: xShifted,
+                                            height: yShifted
+                                        });
+                                    }
+                                });
                             }
-                        });
-                        $(document).unbind('mouseup').on('mouseup', '.selectArea', function() {
-                            selectMark_reset(true, $('.selectArea'));
+                            else {
+                                // selectMark
+                                // behavior dependent of right move
+                                $(this).unbind('mousemove').on('mousemove', function(e) {
+                                    var x2 = (e.pageX - offset.left),
+                                        y2 = (e.pageY - offset.top);
 
-                            // data coords displaying
-                            $selectCoords = $('#selectCoords');
-                            $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
-                            $selectCoordsDt = $selectCoords.data();
-                            // callback data
-                            if (typeof t.settings.callback === "function"){
-                                t.settings.callback($selectCoordsDt);
+                                    prevY && (yShifted += e.pageY - prevY);
+                                    prevX && (xShifted += e.pageX - prevX);
+                                    prevX = e.pageX;
+                                    prevY = e.pageY;
+                                    _selectMark.css({
+                                        width: -xShifted,
+                                        height: -yShifted,
+                                        top: y2 + t.settings.cursorDistance,
+                                        left: x2 + t.settings.cursorDistance
+                                    });
+                                });
                             }
+                        }
+                    });
+
+                    // selectMark
+                    // generating cords end of the event
+                    $(document).unbind('mouseup').on('mouseup', '.selectArea', function() {
+                        selectMark_reset(true, $('.selectArea'));
+                        var x2 = (e.pageX - offset.left),
+                            y2 = (e.pageY - offset.top);
+
+                        // data coords displaying
+                        $selectCoords = $('#selectCoords');
+                        $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
+                        $selectCoordsDt = $selectCoords.data();
+                        // callback data
+                        if (typeof t.settings.callback === "function"){
+                            t.settings.callback($selectCoordsDt);
+                        }
+                    });
+                    setTimeout(function (){
+                        _selectMark.on('mouseenter', function(){
+                            selectMark_reset();
                         });
-                        setTimeout(function (){
-                            _selectMark.on('mouseenter', function(){
-                                selectMark_reset();
-                            });
-                        }, int);
-                    }
-                    else if(e.button == 2){
-                        /* console.log('Plugin is disable for right click'); */
-                    }
+                    }, int);
                 });
             }
         }
