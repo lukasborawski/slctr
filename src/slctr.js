@@ -8,7 +8,7 @@
  MIT License: www.opensource.org/licenses/MIT
  */
 
-var $selectCoordsDtm;
+var $selectCoordsDt;
 
 ;(function ($, window, document) {
 
@@ -200,7 +200,9 @@ var $selectCoordsDtm;
 
                         // data coords displaying
                         $selectCoords = $('#selectCoords');
-                        $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
+                        xShifted < 0 ?
+                            $selectCoords.data({"x": x2, "y": y2, "w": -xShifted, "h": -yShifted}) :
+                            $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
                         $selectCoordsDt = $selectCoords.data();
                         // callback data
                         if (typeof t.settings.callback === "function"){
