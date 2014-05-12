@@ -57,7 +57,7 @@ This is how Slctr looks like.
 ![Slctr Preview](http://f.cl.ly/items/0a27451e3z253p3y3Z14/preview.jpg "Slctr Preview")
 
 #####Notes
-Please note that is **0.3** version. Feel free to use the plugin anywhere and any way you want. Let me know if you find a bug or if it is worth something to change.
+Please note that is **0.4** version. Feel free to use the plugin anywhere and any way you want. Let me know if you find a bug or if it is worth something to change.
 
 **MIT License: [www.opensource.org/licenses/MIT](http://opensource.org/licenses/MIT "License").**
 
