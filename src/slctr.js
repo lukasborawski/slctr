@@ -1,5 +1,5 @@
 /*
- Slctr v.0.3
+ Slctr v.0.4
  ------------------------------------------------------------------
  Info: Slctr is a simple jQuery plugin created for selecting
  an area of graphic document and get coordinates of this selection.
@@ -52,7 +52,7 @@ var $selectCoordsDt;
                     int = 400, t = this;
 
                 // selectArea
-                // global width calculate
+                // global canvas width calculate
                 var counter = 0,
                     insideElmntsLength = mainBox.find('>' + this.settings.insdElmnts).length;
                 insideElmnt.data('data', 'insideObject');
@@ -109,46 +109,26 @@ var $selectCoordsDt;
                     _selectMark = $('.selectMark');
 
                     // selectMark
-                    // direction logic
-                    function closestDirection(x,y,w,h) {
-                        var topEdgeDist = distMetric(x,y,w/2,0);
-                        var bottomEdgeDist = distMetric(x,y,w/2,h);
-                        var leftEdgeDist = distMetric(x,y,0,h/2);
-                        var rightEdgeDist = distMetric(x,y,w,h/2);
-                        var min = Math.min(topEdgeDist,bottomEdgeDist,leftEdgeDist,rightEdgeDist);
-
-                        switch (min) {
-                            case leftEdgeDist:
-                                return "left";
-                            case rightEdgeDist:
-                                return "right";
-                            case topEdgeDist:
-                                return "top";
-                            case bottomEdgeDist:
-                                return "bottom";
-                        }
-                    }
-                    function distMetric(x,y,x2,y2) {
-                        var xDiff = x - x2;
-                        var yDiff = y - y2;
-
-                        return (xDiff * xDiff) + (yDiff * yDiff);
-                    }
-
-                    // selectMark
                     // default values
                     var xShifted = 0, yShifted = 0;
                     var offset = $(this).offset();
 
                     // selectMark
-                    // size calculate
-                    $(this).unbind('mousemove').on('mousemove', function(e) {
-                        if (select){
-                            var edge = closestDirection(e.pageX, e.pageY, $(this).width(), $(this).height());
+                    // direction logic
+                    var last_position = {};
 
-                            if (edge == "left" || edge == "top"){
+                    // selectMark
+                    // size calculate
+                    $(this).on('mousemove', function(e) {
+                        if (typeof(last_position.x) != 'undefined') {
+                            var deltaX = last_position.x - event.clientX,
+                                deltaY = last_position.y - event.clientY;
+
+                            if ((
+                                Math.abs(deltaX) > Math.abs(deltaY) && deltaX < 0) ||
+                                (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < 0)) {
                                 // selectMark
-                                // behavior dependent of left move
+                                // behavior dependent of right move
                                 var x2 = (e.pageX - offset.left),
                                     y2 = (e.pageY - offset.top);
 
@@ -168,10 +148,11 @@ var $selectCoordsDt;
                                         });
                                     }
                                 });
-                            }
-                            else {
+                            } else if ((
+                                Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 0) ||
+                                (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 0)) {
                                 // selectMark
-                                // behavior dependent of right move
+                                // behavior dependent of left move
                                 $(this).unbind('mousemove').on('mousemove', function(e) {
                                     var x2 = (e.pageX - offset.left),
                                         y2 = (e.pageY - offset.top);
@@ -189,11 +170,15 @@ var $selectCoordsDt;
                                 });
                             }
                         }
+                        last_position = {
+                            x : event.clientX,
+                            y : event.clientY
+                        };
                     });
 
                     // selectMark
-                    // generating cords end of the event
-                    $(document).unbind('mouseup').on('mouseup', '.selectArea', function() {
+                    // generating coords end of the event
+                    $(this).unbind('mouseup').on('mouseup', function() {
                         selectMark_reset(true, $('.selectArea'));
                         var x2 = (e.pageX - offset.left),
                             y2 = (e.pageY - offset.top);
@@ -201,7 +186,7 @@ var $selectCoordsDt;
                         // data coords displaying
                         $selectCoords = $('#selectCoords');
                         xShifted < 0 ?
-                            $selectCoords.data({"x": x2, "y": y2, "w": -xShifted, "h": -yShifted}) :
+                            $selectCoords.data({"x": x2 + xShifted, "y": y2 + yShifted, "w": -xShifted, "h": -yShifted}) :
                             $selectCoords.data({"x": x2, "y": y2, "w": xShifted, "h": yShifted});
                         $selectCoordsDt = $selectCoords.data();
                         // callback data
